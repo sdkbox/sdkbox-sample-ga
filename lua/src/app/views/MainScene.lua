@@ -18,26 +18,31 @@ function MainScene:onCreate()
 end
 
 function MainScene:setupTestMenu()
-    local label1 = cc.Label:createWithSystemFont("Test Item 1", "sans", 28)
-    local item1 = cc.MenuItemLabel:create(label1)
-    item1:onClicked(function()
-        print("Test Item 1")
-    end)
+    cc.MenuItemFont:setFontName("sans")
+    local size = cc.Director:getInstance():getWinSize()
 
-    local label2 = cc.Label:createWithSystemFont("Test Item 2", "sans", 28)
-    local item2 = cc.MenuItemLabel:create(label2)
-    item2:onClicked(function()
-        print("Test Item 2")
-    end)
+    sdkbox.PluginGoogleAnalytics:init()
+    local menu = cc.Menu:create(
+        cc.MenuItemFont:create("log event"):onClicked(function()
+            sdkbox.PluginGoogleAnalytics:logEvent("Test", "Click", "", 1)
+            sdkbox.PluginGoogleAnalytics:dispatchHits()
+            print("sdkbox.PluginGoogleAnalytics:logEvent(\"Test\", \"Click\", \"\", 1);")
+        end),
 
-    local label3 = cc.Label:createWithSystemFont("Test Item 3", "sans", 28)
-    local item3 = cc.MenuItemLabel:create(label3)
-    item3:onClicked(function()
-        print("Test Item 3")
-    end)
+        cc.MenuItemFont:create("log exception"):onClicked(function()
+            sdkbox.PluginGoogleAnalytics:logException("Test Exception", true);
+            sdkbox.PluginGoogleAnalytics:dispatchHits();
+            print("sdkbox.PluginGoogleAnalytics:logException(\"Test Exception\", true);");
+        end),
 
-    local menu = cc.Menu:create(item1, item2, item3)
-    menu:alignItemsVerticallyWithPadding(24)
+        cc.MenuItemFont:create("log social"):onClicked(function()
+            sdkbox.PluginGoogleAnalytics:logSocial("facebook", "share", "sdkbox");
+            sdkbox.PluginGoogleAnalytics:dispatchHits();
+            print("sdkbox.PluginGoogleAnalytics:logSocial(\"facebook\", \"share\", \"sdkbox\");");
+        end))
+
+    menu:alignItemsVerticallyWithPadding(5)
+    menu:setPosition(size.width/2, size.height/2)
     self:addChild(menu)
 end
 
