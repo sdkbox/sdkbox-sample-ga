@@ -18,6 +18,9 @@ public:
 private:
     void createTestMenu();
 
+    void onLogEvent(cocos2d::Ref* sender);
+    void onLogException(cocos2d::Ref* sender);
+    void onLogSocial(cocos2d::Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

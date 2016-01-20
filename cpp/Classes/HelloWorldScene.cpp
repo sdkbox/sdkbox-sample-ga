@@ -1,5 +1,6 @@
 
 #include "HelloWorldScene.h"
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"
 
 USING_NS_CC;
 
@@ -56,21 +57,36 @@ bool HelloWorld::init()
 
 void HelloWorld::createTestMenu()
 {
-    auto menu = Menu::create();
-
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 1", "sans", 24), [](Ref*){
-        CCLOG("Test Item 1");
-    }));
-
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 2", "sans", 24), [](Ref*){
-        CCLOG("Test Item 2");
-    }));
-
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 3", "sans", 24), [](Ref*){
-        CCLOG("Test Item 3");
-    }));
-
-    menu->alignItemsVerticallyWithPadding(10);
+    MenuItemFont::setFontName("sans");
+    Size size = Director::getInstance()->getWinSize();
+    
+    auto menu = Menu::create(MenuItemFont::create("log event", CC_CALLBACK_1(HelloWorld::onLogEvent, this)),
+                             MenuItemFont::create("log exception", CC_CALLBACK_1(HelloWorld::onLogException, this)),
+                             MenuItemFont::create("log social", CC_CALLBACK_1(HelloWorld::onLogSocial, this)),
+                             NULL);
+    
+    menu->alignItemsVerticallyWithPadding(5);
+    menu->setPosition(Vec2(size.width/2, size.height/2));
     addChild(menu);
 }
 
+void HelloWorld::onLogEvent(cocos2d::Ref* sender)
+{
+    sdkbox::PluginGoogleAnalytics::logEvent("Test", "Click", "", 1);
+    sdkbox::PluginGoogleAnalytics::dispatchHits();
+    CCLOG("sdkbox::PluginGoogleAnalytics::logEvent(\"Test\", \"Click\", \"\", 1);");
+}
+
+void HelloWorld::onLogException(cocos2d::Ref* sender)
+{
+    sdkbox::PluginGoogleAnalytics::logException("Test Exception", true);
+    sdkbox::PluginGoogleAnalytics::dispatchHits();
+    CCLOG("sdkbox::PluginGoogleAnalytics::logException(\"Test Exception\", true);");
+}
+
+void HelloWorld::onLogSocial(cocos2d::Ref* sender)
+{
+    sdkbox::PluginGoogleAnalytics::logSocial("facebook", "share", "sdkbox");
+    sdkbox::PluginGoogleAnalytics::dispatchHits();
+    CCLOG("sdkbox::PluginGoogleAnalytics::logSocial(\"facebook\", \"share\", \"sdkbox\");");
+}
