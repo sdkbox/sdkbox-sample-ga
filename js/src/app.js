@@ -31,23 +31,32 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
     createTestMenu:function() {
-        var item1 = new cc.MenuItemLabel(new cc.LabelTTF("Test Item 1", "sans", 28), function() {
-            cc.log("Test Item 1");
-        });
+        cc.MenuItemFont.setFontName("sans");
+        var size = cc.Director.getInstance().getWinSize();
 
-        var item2 = new cc.MenuItemLabel(new cc.LabelTTF("Test Item 2", "sans", 28), function() {
-            cc.log("Test Item 2");
-        });
+        sdkbox.PluginGoogleAnalytics.init();
+        var menu = new cc.Menu(
+            new cc.MenuItemFont("log event", function() {
+                sdkbox.PluginGoogleAnalytics.logEvent("Test", "Click", "", 1);
+                sdkbox.PluginGoogleAnalytics.dispatchHits();
+                cc.log("sdkbox.PluginGoogleAnalytics.logEvent(\"Test\", \"Click\", \"\", 1);");
+            }),
 
-        var item3 = new cc.MenuItemLabel(new cc.LabelTTF("Test Item 3", "sans", 28), function() {
-            cc.log("Test Item 3");
-        });
+            new cc.MenuItemFont("log exception", function() {
+                sdkbox.PluginGoogleAnalytics.logException("Test Exception", true);
+                sdkbox.PluginGoogleAnalytics.dispatchHits();
+                cc.log("sdkbox.PluginGoogleAnalytics.logException(\"Test Exception\", true);");
+            }),
 
-        var winsize = cc.winSize;
-        var menu = new cc.Menu(item1, item2, item3);
-        menu.x = winsize.width / 2;
-        menu.y = winsize.height / 2;
-        menu.alignItemsVerticallyWithPadding(20);
+            new cc.MenuItemFont("log social", function() {
+                sdkbox.PluginGoogleAnalytics.logSocial("facebook", "share", "sdkbox");
+                sdkbox.PluginGoogleAnalytics.dispatchHits();
+                cc.log("sdkbox.PluginGoogleAnalytics.logSocial(\"facebook\", \"share\", \"sdkbox\");");
+            }));
+
+        menu.alignItemsVerticallyWithPadding(5);
+        menu.x = size.width/2;
+        menu.y = size.height/2;
         this.addChild(menu);
     }
 });
