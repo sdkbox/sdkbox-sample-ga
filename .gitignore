@@ -11,10 +11,10 @@ cpp/proj.android/obj/
 cpp/proj.android/bin/
 cpp/proj.android/gen/
 cpp/proj.android/libs/
-cpp/proj.android/libs/ga_lib/local.properties
-cpp/proj.android/libs/ga_lib/proguard-project.txt
-cpp/proj.android/libs/ga_lib/bin/
-cpp/proj.android/libs/ga_lib/gen/
+cpp/proj.android/libs/gps/local.properties
+cpp/proj.android/libs/gps/proguard-project.txt
+cpp/proj.android/libs/gps/bin/
+cpp/proj.android/libs/gps/gen/
 
 lua/frameworks/runtime-src/proj.ios_mac/build
 lua/frameworks/runtime-src/proj.android/local.properties
@@ -24,10 +24,10 @@ lua/frameworks/runtime-src/proj.android/bin/
 lua/frameworks/runtime-src/proj.android/gen/
 lua/frameworks/runtime-src/proj.android/libs/
 lua/simulator
-lua/frameworks/runtime-src/proj.android/libs/ga_lib/bin/
-lua/frameworks/runtime-src/proj.android/libs/ga_lib/gen/
-lua/frameworks/runtime-src/proj.android/libs/ga_lib/local.properties
-lua/frameworks/runtime-src/proj.android/libs/ga_lib/proguard-project.txt
+lua/frameworks/runtime-src/proj.android/libs/gps/bin/
+lua/frameworks/runtime-src/proj.android/libs/gps/gen/
+lua/frameworks/runtime-src/proj.android/libs/gps/local.properties
+lua/frameworks/runtime-src/proj.android/libs/gps/proguard-project.txt
 
 
 js/frameworks/runtime-src/proj.ios_mac/build
@@ -38,7 +38,7 @@ js/frameworks/runtime-src/proj.android/bin/
 js/frameworks/runtime-src/proj.android/gen/
 js/frameworks/runtime-src/proj.android/libs/
 js/simulator
-js/frameworks/runtime-src/proj.android/libs/ga_lib/bin/
-js/frameworks/runtime-src/proj.android/libs/ga_lib/gen/
-js/frameworks/runtime-src/proj.android/libs/ga_lib/local.properties
-js/frameworks/runtime-src/proj.android/libs/ga_lib/proguard-project.txt
+js/frameworks/runtime-src/proj.android/libs/gps/bin/
+js/frameworks/runtime-src/proj.android/libs/gps/gen/
+js/frameworks/runtime-src/proj.android/libs/gps/local.properties
+js/frameworks/runtime-src/proj.android/libs/gps/proguard-project.txt
