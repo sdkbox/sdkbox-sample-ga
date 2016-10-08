@@ -1,5 +1,4 @@
 #include "PluginGoogleAnalyticsJS.hpp"
-#include "cocos2d_specifics.hpp"
 #include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"
 #include "SDKBoxJSHelper.h"
 #include "sdkbox/Sdkbox.h"
@@ -22,7 +21,7 @@ static bool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
         typeClass = typeMapIter->second;
         CCASSERT(typeClass, "The value is null.");
 
-#if (COCOS2D_VERSION >= 0x00031000)
+#if (SDKBOX_COCOS_JSB_VERSION >= 2)
         JS::RootedObject proto(cx, typeClass->proto.ref());
         JS::RootedObject parent(cx, typeClass->parentProto.ref());
 #else
@@ -30,7 +29,7 @@ static bool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
         JS::RootedObject parent(cx, typeClass->parentProto.get());
 #endif
         JS::RootedObject _tmp(cx, JS_NewObject(cx, typeClass->jsclass, proto, parent));
-        
+
         T* cobj = new T();
         js_proxy_t *pp = jsb_new_proxy(cobj, _tmp);
         AddObjectRoot(cx, &pp->obj);
@@ -49,7 +48,7 @@ static bool js_is_native_obj(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     args.rval().setBoolean(true);
-    return true;    
+    return true;
 }
 #else
 template<class T>
@@ -84,7 +83,7 @@ static bool empty_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
 static bool js_is_native_obj(JSContext *cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp)
 {
     vp.set(BOOLEAN_TO_JSVAL(true));
-    return true;    
+    return true;
 }
 #endif
 #elif defined(JS_VERSION)
@@ -319,8 +318,17 @@ JSBool js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_dispatchPeriodically(JSC
 bool js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_init(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
     if (argc == 0) {
         sdkbox::PluginGoogleAnalytics::init();
+        args.rval().setUndefined();
+        return true;
+    }
+    if (argc == 1) {
+        const char* arg0;
+        std::string arg0_tmp; ok &= jsval_to_std_string(cx, args.get(0), &arg0_tmp); arg0 = arg0_tmp.c_str();
+        JSB_PRECONDITION2(ok, cx, false, "js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_init : Error processing arguments");
+        sdkbox::PluginGoogleAnalytics::init(arg0);
         args.rval().setUndefined();
         return true;
     }
@@ -330,8 +338,18 @@ bool js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_init(JSContext *cx, uint32
 #elif defined(JS_VERSION)
 JSBool js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_init(JSContext *cx, uint32_t argc, jsval *vp)
 {
+    jsval *argv = JS_ARGV(cx, vp);
+    JSBool ok = JS_TRUE;
     if (argc == 0) {
         sdkbox::PluginGoogleAnalytics::init();
+        JS_SET_RVAL(cx, vp, JSVAL_VOID);
+        return JS_TRUE;
+    }
+    if (argc == 1) {
+        const char* arg0;
+        std::string arg0_tmp; ok &= jsval_to_std_string(cx, argv[0], &arg0_tmp); arg0 = arg0_tmp.c_str();
+        JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+        sdkbox::PluginGoogleAnalytics::init(arg0);
         JS_SET_RVAL(cx, vp, JSVAL_VOID);
         return JS_TRUE;
     }
@@ -710,7 +728,7 @@ void js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_finalize(JSFreeOp *fop, JS
     js_proxy_t* nproxy;
     js_proxy_t* jsproxy;
 
-#if (COCOS2D_VERSION >= 0x00031000)
+#if (SDKBOX_COCOS_JSB_VERSION >= 2)
     JSContext *cx = ScriptingCore::getInstance()->getGlobalContext();
     JS::RootedObject jsobj(cx, obj);
     jsproxy = jsb_get_js_proxy(jsobj);
@@ -724,7 +742,7 @@ void js_PluginGoogleAnalyticsJS_PluginGoogleAnalytics_finalize(JSFreeOp *fop, JS
         sdkbox::PluginGoogleAnalytics *nobj = static_cast<sdkbox::PluginGoogleAnalytics *>(nproxy->ptr);
         if (nobj)
             delete nobj;
-        
+
         jsb_remove_proxy(nproxy, jsproxy);
     }
 }
@@ -786,11 +804,11 @@ void js_register_PluginGoogleAnalyticsJS_PluginGoogleAnalytics(JSContext *cx, JS
         st_funcs);
     // make the class enumerable in the registered namespace
 //  bool found;
-//FIXME: Removed in Firefox v27 
+//FIXME: Removed in Firefox v27
 //  JS_SetPropertyAttributes(cx, global, "PluginGoogleAnalytics", JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 
     // add the proto and JSClass to the type->js info hash table
-#if (COCOS2D_VERSION >= 0x00031000)
+#if (SDKBOX_COCOS_JSB_VERSION >= 2)
     JS::RootedObject proto(cx, jsb_sdkbox_PluginGoogleAnalytics_prototype);
     jsb_register_class<sdkbox::PluginGoogleAnalytics>(cx, jsb_sdkbox_PluginGoogleAnalytics_class, proto, JS::NullPtr());
 #else
@@ -863,7 +881,7 @@ void js_register_PluginGoogleAnalyticsJS_PluginGoogleAnalytics(JSContext *cx, JS
         st_funcs);
     // make the class enumerable in the registered namespace
 //  bool found;
-//FIXME: Removed in Firefox v27 
+//FIXME: Removed in Firefox v27
 //  JS_SetPropertyAttributes(cx, global, "PluginGoogleAnalytics", JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 
     // add the proto and JSClass to the type->js info hash table
