@@ -1,6 +1,5 @@
 #include "PluginGoogleAnalyticsLua.hpp"
 #include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"
-#include "tolua_fix.h"
 #include "SDKBoxLuaHelper.h"
 #include "sdkbox/Sdkbox.h"
 
@@ -251,6 +250,19 @@ int lua_PluginGoogleAnalyticsLua_PluginGoogleAnalytics_init(lua_State* tolua_S)
             return 0;
         }
         sdkbox::PluginGoogleAnalytics::init();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1)
+    {
+        const char* arg0;
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "sdkbox.PluginGoogleAnalytics:init"); arg0 = arg0_tmp.c_str();
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_PluginGoogleAnalyticsLua_PluginGoogleAnalytics_init'", nullptr);
+            return 0;
+        }
+        sdkbox::PluginGoogleAnalytics::init(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
