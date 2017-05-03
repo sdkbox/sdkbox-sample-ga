@@ -39,6 +39,38 @@ function MainScene:setupTestMenu()
             sdkbox.PluginGoogleAnalytics:logSocial("facebook", "share", "sdkbox");
             sdkbox.PluginGoogleAnalytics:dispatchHits();
             print("sdkbox.PluginGoogleAnalytics:logSocial(\"facebook\", \"share\", \"sdkbox\");");
+        end),
+
+        cc.MenuItemFont:create("log ecommerce"):onClicked(function()
+            local ecommerceInfo = {
+                -- transaction info
+                action = 'purchase',
+                transaction = 'T12345',
+                affiliation = 'Google Store - Online',
+                transactionCouponCode = 'SUMMER2017',
+                revenue = '37.39',
+                tax = '2.85',
+                shipping = '5.34',
+
+                -- product info
+                productID = 'P12345',
+                productName = 'Android Warhol T-Shirt',
+                category = 'Apparel/T-Shirts',
+                brand = 'SDKBox',
+                productVariant = 'black',
+                productCouponCode = 'APPARELSALE',
+                price = '29.20',
+                quantity = '1',
+
+                -- currency code
+                -- https://support.google.com/analytics/answer/6205902?#supported-currencies
+                currencyCode = 'EUR'
+            }
+
+            sdkbox.PluginGoogleAnalytics:logECommerce(ecommerceInfo)
+            sdkbox.PluginGoogleAnalytics:dispatchHits()
+            print("sdkbox.PluginGoogleAnalytics:logECommerce")
+            dump(ecommerceInfo, "ecommerceInfo:")
         end))
 
     menu:alignItemsVerticallyWithPadding(5)

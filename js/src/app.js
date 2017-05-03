@@ -1,7 +1,6 @@
-
 var HelloWorldLayer = cc.Layer.extend({
-    sprite:null,
-    ctor:function () {
+    sprite: null,
+    ctor: function() {
         //////////////////////////////
         // 1. super init first
         this._super();
@@ -30,7 +29,7 @@ var HelloWorldLayer = cc.Layer.extend({
         return true;
     },
 
-    createTestMenu:function() {
+    createTestMenu: function() {
         cc.MenuItemFont.setFontName("sans");
         var size = cc.Director.getInstance().getWinSize();
 
@@ -52,20 +51,50 @@ var HelloWorldLayer = cc.Layer.extend({
                 sdkbox.PluginGoogleAnalytics.logSocial("facebook", "share", "sdkbox");
                 sdkbox.PluginGoogleAnalytics.dispatchHits();
                 cc.log("sdkbox.PluginGoogleAnalytics.logSocial(\"facebook\", \"share\", \"sdkbox\");");
+            }),
+
+            new cc.MenuItemFont("log ecommerce", function() {
+                const ecommerceInfo = {
+                    // transaction info
+                    action: 'purchase',
+                    transaction: 'T12345',
+                    affiliation: 'Google Store - Online',
+                    transactionCouponCode: 'SUMMER2017',
+                    revenue: '37.39',
+                    tax: '2.85',
+                    shipping: '5.34',
+
+                    // product info
+                    productID: 'P12345',
+                    productName: 'Android Warhol T-Shirt',
+                    category: 'Apparel/T-Shirts',
+                    brand: 'SDKBox',
+                    productVariant: 'black',
+                    productCouponCode: 'APPARELSALE',
+                    price: '29.20',
+                    quantity: '1',
+
+                    // currency code
+                    // https://support.google.com/analytics/answer/6205902?#supported-currencies
+                    currencyCode: 'EUR'
+                };
+
+                sdkbox.PluginGoogleAnalytics.logECommerce(ecommerceInfo);
+                sdkbox.PluginGoogleAnalytics.dispatchHits();
+                cc.log("sdkbox.PluginGoogleAnalytics:logECommerce");
             }));
 
         menu.alignItemsVerticallyWithPadding(5);
-        menu.x = size.width/2;
-        menu.y = size.height/2;
+        menu.x = size.width / 2;
+        menu.y = size.height / 2;
         this.addChild(menu);
     }
 });
 
 var HelloWorldScene = cc.Scene.extend({
-    onEnter:function () {
+    onEnter: function() {
         this._super();
         var layer = new HelloWorldLayer();
         this.addChild(layer);
     }
 });
-
